@@ -125,3 +125,13 @@ export const loginUser = async (req, res) => {
         res.status(403).json({ message: 'No se logro verificar cuenta. ' })
     }
 }
+
+export const getUserByRut = async (req, res) => {
+    try {
+        const { rut } = req.params
+        const getUser = await User.findOne({ rut: rut })
+        res.status(200).json(getUser)
+    } catch (error) {
+        res.status(404).json({ message: ' No se encontro usuario. ' })
+    }
+}
