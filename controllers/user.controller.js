@@ -1,5 +1,6 @@
 import { User } from '../Models/User.model.js'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 //Traer listado de usuarios 
 export const getAllUser = async (req, res) => {
@@ -85,5 +86,42 @@ export const singUp = async (req, res) => {
         res.status(201).json({ message: `Usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado.` })
     } catch (error) {
         res.status(500).json({ message: 'Error al logear.' })
+    }
+}
+
+export const loginUser = async (req, res) => {
+    try {
+        const { correo, password } = req.body
+
+        const verifyUserCorreo = await User.findOne({ correo: correo })
+        if (!verifyUserCorreo) {
+            return res.status(404).json({ message: 'Este correo no existe.' })
+        }
+
+        const verifyPassword = await bcrypt.compare(password, verifyUserCorreo.password)
+        if (!verifyPassword) {
+            return res.status(403).json({ message: 'La contrasena es incorrecta.' })
+        }
+
+        // Tiempo para que el Token dure 1 Hora
+        const expireTime = Math.floor(new Date() / 1000) + 3600
+
+        const { _id, nombre, apellido, edad } = verifyUserCorreo
+
+        // importar jsonwebtoken 
+        const token = jwt.sign({
+            exp: expireTime,
+            data: {
+                id: _id,
+                correo: correo,
+                nombre: nombre,
+                apellido: apellido,
+                edad: edad
+            }
+        }, process.env.SECRET_KEY)
+
+        res.json(token)
+    } catch (error) {
+        res.status(403).json({ message: 'No se logro verificar cuenta. ' })
     }
 }
