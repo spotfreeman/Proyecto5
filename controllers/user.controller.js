@@ -58,13 +58,31 @@ export const deleteUser = async (req, res) => {
 
 export const singUp = async (req, res) => {
     try {
+        // destructurar el const newUser para validar cada campo
         const { nombre, apellido, rut, edad, correo, password } = req.body
+
         if (!nombre || !apellido || !rut || !edad || !correo || !password) {
-            res.status(400).json({ message: 'Debes completar los datos requeridos' })
+            return res.status(400).json({ message: 'Debes completar los datos requeridos' })
         }
 
-        res.status(201).json({ message: `` })
+        const verifyUser = await User.findOne({ rut: rut })
+        if (verifyUser) {
+            return res.status(500).json({ message: 'El RUT ya existe.' })
+        }
 
+        const passwordEncrypt = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            nombre,
+            apellido,
+            rut,
+            edad,
+            correo,
+            password: passwordEncrypt
+        })
+
+        const saveUser = await user.save()
+        res.status(201).json({ message: `Usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado.` })
     } catch (error) {
         res.status(500).json({ message: 'Error al logear.' })
     }
