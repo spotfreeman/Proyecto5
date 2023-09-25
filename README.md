@@ -24,8 +24,8 @@ Herramientas utilizadas para crear el proyecto:
 * JavaScript - Lógica y funcionalidad del gestor de tareas.
 * MongoDB - Base de datos en MongoDB
 * Render.com - Desplegar entorno Backend
-* Express -
-* Node.js -
+* Express - Para desarrollo de Brackend
+* Node.js - Para desarrollo de Frontend
 
 
 ## Contribuir 🖇️
