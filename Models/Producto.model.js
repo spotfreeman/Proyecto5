@@ -5,8 +5,8 @@ const productoSchema = new Schema({
     nombre: { type: String, required: true },
     codigo: { type: String, required: true },
     valor: { type: String, required: true },
-    descripcion : { type: String, required: true },
-    material : { type: String, required: true },
+    descripcion: { type: String, required: true },
+    material: { type: String, required: true },
 
 }, { versionKey: false })
 

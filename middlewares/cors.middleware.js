@@ -1,7 +1,7 @@
 export const corsOptions = {
     origin: [
         // URL del Frontend
-        'http://localhost:4000'
+        'https://spotfreeman.github.io/Proyecto5-Frontend/'
     ],
     optionsSucessStatus: 200
 }
