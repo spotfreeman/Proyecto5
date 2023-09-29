@@ -12,8 +12,6 @@ export const authRequire = (req, res, next) => {
         }
         req.data = decoded.data
 
-
-
     } catch (error) {
         return res.status(401).json(error)
     }
