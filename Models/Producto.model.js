@@ -10,4 +10,4 @@ const productoSchema = new Schema({
 
 }, { versionKey: false })
 
-export const Producto = mongoose.model('productos', productoSchema) 
+export const Producto = mongoose.model('productos', productoSchema)
