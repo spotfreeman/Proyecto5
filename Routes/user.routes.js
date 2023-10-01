@@ -2,7 +2,7 @@ import express from 'express'
 const router = express.Router()
 
 import { getAllUser, createUser, updateUser, deleteUser, singUp, loginUser, getUserByRut } from '../controllers/user.controller.js'
-import { authRequire } from '../middlewares/auth.middleware.js'
+// import { authRequire } from '../middlewares/auth.middleware.js'
 
 // authRequire eliminado para test
 

@@ -1,11 +1,12 @@
 import express from 'express'
-import userRouter from './Routes/user.routes.js'
-import { db } from './config/db.config.js'
 import cors from 'cors'
+import userRouter from './Routes/user.routes.js'
 import productoRouter from './Routes/producto.routes.js'
+import { db } from './config/db.config.js'
 
 import dotenv from 'dotenv'
 import { corsOptions } from './middlewares/cors.middleware.js'
+
 dotenv.config()
 
 const app = express()

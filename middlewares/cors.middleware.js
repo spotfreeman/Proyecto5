@@ -1,7 +1,7 @@
 export const corsOptions = {
     origin: [
         // URL del Frontend.
-        'https://proyecto5-3dprint.netlify.app:4000'
+        'http://localhost:4002/'
     ],
-    optionsSuccessStatus: 200
+    optionsSucessStatus: 200
 }
