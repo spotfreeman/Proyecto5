@@ -14,13 +14,12 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-//Middlewares Cors
-app.use(cors(corsOptions))
+//Middlewares Cors Testear sin el corsOptions
+app.use(cors())
 
 //Middlewares de rutas
 app.use('/api/v1', userRouter)
 app.use('/api/v1', productoRouter)
-
 
 
 db()
