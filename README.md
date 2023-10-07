@@ -6,6 +6,12 @@ colocar enlace aqui
 
 Desarrollo de proyecto de e-commerce para cumplimiento de metas de estudios UDD Desarrollo FullStack
 
+BACKEND
+https://github.com/spotfreeman/Proyecto5
+
+FRONTEND
+https://github.com/spotfreeman/Proyecto5-Frontend
+
 ## Insignias
 
 ![Badge en Desarrollo](https://img.shields.io/badge/STATUS-EnDesarrollo-green)

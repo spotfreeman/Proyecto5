@@ -1,8 +1,8 @@
 import express from 'express'
 const router = express.Router()
 
-import { getAllUser, createUser, updateUser, deleteUser, singUp, loginUser, getUserByRut } from '../controllers/user.controller.js'
-// import { authRequire } from '../middlewares/auth.middleware.js'
+import { getAllUser, createUser, updateUser, deleteUser, singUp, loginUser, getUserByRut, verifyUser } from '../controllers/user.controller.js'
+import { authRequire } from '../middlewares/auth.middleware.js'
 
 // authRequire eliminado para test
 
@@ -16,6 +16,7 @@ router.delete('/users/:rut', deleteUser)
 router.post('/users', singUp)
 
 router.post('/login', loginUser)
+router.get('/verify-token', authRequire, verifyUser)
 
 router.get('/users/:rut', getUserByRut)
 

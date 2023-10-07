@@ -24,6 +24,16 @@ export const createUser = async (req, res) => {
 
     } catch (error) {
         res.status(400).json({ message: 'No se logro crear usuario.' })
+
+    }
+}
+
+export const verifyUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.data.id).select('-password')
+        res.json(user)
+    } catch (error) {
+        return res.status(500({ message: 'No se pudo verificar usuario.' }))
     }
 }
 
@@ -36,9 +46,7 @@ export const updateUser = async (req, res) => {
         if (!updateUser) {
             return res.status(404).json({ message: 'No se encontro usuario para actualizar. ' })
         }
-
         res.status(202).json({ message: `El usuario ${updateUser.nombre} ${updateUser.apellido} fue actualizado con exito. ` })
-
     } catch (error) {
         res.status(500).json({ message: `No fue posible actualizar el usuario. ` })
     }
@@ -83,7 +91,22 @@ export const singUp = async (req, res) => {
         })
 
         const saveUser = await user.save()
-        res.status(201).json({ message: `Usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado.` })
+        // Tiempo para que el Token dure 1 Hora
+        const expireTime = Math.floor(new Date() / 1000) + 3600
+
+        const token = jwt.sign({
+            exp: expireTime,
+            data: {
+                id: _id,
+                correo: correo,
+                nombre: nombre,
+                apellido: apellido,
+                edad: edad
+            }
+        }, process.env.SECRET_KEY)
+
+
+        res.status(201).json({ message: `Usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado.`, token, user: saveUser })
     } catch (error) {
         res.status(500).json({ message: 'Error al logear.' })
     }
@@ -120,7 +143,7 @@ export const loginUser = async (req, res) => {
             }
         }, process.env.SECRET_KEY)
 
-        res.json(token)
+        res.json({ token, user: verifyUserCorreo })
     } catch (error) {
         res.status(403).json({ message: 'No se logro verificar cuenta. ' })
     }
