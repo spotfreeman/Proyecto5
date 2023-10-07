@@ -25,9 +25,9 @@ export const getUserByRut = async (req, res) => {
 export const singUp = async (req, res) => {
     try {
         // destructurar el const newUser para validar cada campo
-        const { nombre, apellido, rut, edad, correo, password } = req.body
+        const { nombre, apellido, rut, correo, password } = req.body
 
-        if (!nombre || !apellido || !rut || !edad || !correo || !password) {
+        if (!nombre || !apellido || !rut || !correo || !password) {
             return res.status(400).json({ message: 'Debes completar los datos requeridos' })
         }
 
@@ -42,7 +42,6 @@ export const singUp = async (req, res) => {
             nombre,
             apellido,
             rut,
-            edad,
             correo,
             password: passwordEncrypt
         })
@@ -57,8 +56,7 @@ export const singUp = async (req, res) => {
                 id: _id,
                 correo: correo,
                 nombre: nombre,
-                apellido: apellido,
-                edad: edad
+                apellido: apellido
             }
         }, process.env.SECRET_KEY)
 
