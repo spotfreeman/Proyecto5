@@ -12,6 +12,104 @@ export const getAllUser = async (req, res) => {
     }
 }
 
+export const getUserByRut = async (req, res) => {
+    try {
+        const { rut } = req.params
+        const getUser = await User.findOne({ rut: rut })
+        res.status(200).json(getUser)
+    } catch (error) {
+        res.status(404).json({ message: ' No se encontro usuario. ' })
+    }
+}
+
+export const singUp = async (req, res) => {
+    try {
+        // destructurar el const newUser para validar cada campo
+        const { nombre, apellido, rut, edad, correo, password } = req.body
+
+        if (!nombre || !apellido || !rut || !edad || !correo || !password) {
+            return res.status(400).json({ message: 'Debes completar los datos requeridos' })
+        }
+
+        const verifyUser = await User.findOne({ rut: rut })
+        if (verifyUser) {
+            return res.status(500).json({ message: 'El RUT ya existe.' })
+        }
+
+        const passwordEncrypt = await bcrypt.hash(password, 10)
+
+        const user = new User({
+            nombre,
+            apellido,
+            rut,
+            edad,
+            correo,
+            password: passwordEncrypt
+        })
+
+        const saveUser = await user.save()
+        // Tiempo para que el Token dure 1 Hora
+        const expireTime = Math.floor(new Date() / 1000) + 3600
+
+        const token = jwt.sign({
+            exp: expireTime,
+            data: {
+                id: _id,
+                correo: correo,
+                nombre: nombre,
+                apellido: apellido,
+                edad: edad
+            }
+        }, process.env.SECRET_KEY)
+
+
+        res.status(201).json({
+            message: `Usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado.`,
+            token,
+            user: saveUser
+        })
+    } catch (error) {
+        res.status(500).json({ message: 'Error al logear.' })
+    }
+}
+
+export const loginUser = async (req, res) => {
+    try {
+        const { correo, password } = req.body
+
+        const verifyUserCorreo = await User.findOne({ correo: correo })
+        if (!verifyUserCorreo) {
+            return res.status(404).json({ message: 'Este correo no existe.' })
+        }
+
+        const verifyPassword = await bcrypt.compare(password, verifyUserCorreo.password)
+        if (!verifyPassword) {
+            return res.status(403).json({ message: 'La contrasena es incorrecta.' })
+        }
+
+        // Tiempo para que el Token dure 1 Hora
+        const expireTime = Math.floor(new Date() / 1000) + 3600
+
+        const { _id, nombre, apellido } = verifyUserCorreo
+
+        // importar jsonwebtoken 
+        const token = jwt.sign({
+            exp: expireTime,
+            data: {
+                id: _id,
+                correo: correo,
+                nombre: nombre,
+                apellido: apellido
+            }
+        }, process.env.SECRET_KEY)
+
+        res.json({ token, user: verifyUserCorreo })
+    } catch (error) {
+        res.status(403).json({ message: 'No se logro verificar cuenta. ' })
+    }
+}
+
+
 // Crear Usuario
 export const createUser = async (req, res) => {
     try {
@@ -65,96 +163,5 @@ export const deleteUser = async (req, res) => {
     }
 }
 
-export const singUp = async (req, res) => {
-    try {
-        // destructurar el const newUser para validar cada campo
-        const { nombre, apellido, rut, edad, correo, password } = req.body
-
-        if (!nombre || !apellido || !rut || !edad || !correo || !password) {
-            return res.status(400).json({ message: 'Debes completar los datos requeridos' })
-        }
-
-        const verifyUser = await User.findOne({ rut: rut })
-        if (verifyUser) {
-            return res.status(500).json({ message: 'El RUT ya existe.' })
-        }
-
-        const passwordEncrypt = await bcrypt.hash(password, 10)
-
-        const user = new User({
-            nombre,
-            apellido,
-            rut,
-            edad,
-            correo,
-            password: passwordEncrypt
-        })
-
-        const saveUser = await user.save()
-        // Tiempo para que el Token dure 1 Hora
-        const expireTime = Math.floor(new Date() / 1000) + 3600
-
-        const token = jwt.sign({
-            exp: expireTime,
-            data: {
-                id: _id,
-                correo: correo,
-                nombre: nombre,
-                apellido: apellido,
-                edad: edad
-            }
-        }, process.env.SECRET_KEY)
 
 
-        res.status(201).json({ message: `Usuario ${saveUser.nombre} ${saveUser.apellido} ha sido creado.`, token, user: saveUser })
-    } catch (error) {
-        res.status(500).json({ message: 'Error al logear.' })
-    }
-}
-
-export const loginUser = async (req, res) => {
-    try {
-        const { correo, password } = req.body
-
-        const verifyUserCorreo = await User.findOne({ correo: correo })
-        if (!verifyUserCorreo) {
-            return res.status(404).json({ message: 'Este correo no existe.' })
-        }
-
-        const verifyPassword = await bcrypt.compare(password, verifyUserCorreo.password)
-        if (!verifyPassword) {
-            return res.status(403).json({ message: 'La contrasena es incorrecta.' })
-        }
-
-        // Tiempo para que el Token dure 1 Hora
-        const expireTime = Math.floor(new Date() / 1000) + 3600
-
-        const { _id, nombre, apellido, edad } = verifyUserCorreo
-
-        // importar jsonwebtoken 
-        const token = jwt.sign({
-            exp: expireTime,
-            data: {
-                id: _id,
-                correo: correo,
-                nombre: nombre,
-                apellido: apellido,
-                edad: edad
-            }
-        }, process.env.SECRET_KEY)
-
-        res.json({ token, user: verifyUserCorreo })
-    } catch (error) {
-        res.status(403).json({ message: 'No se logro verificar cuenta. ' })
-    }
-}
-
-export const getUserByRut = async (req, res) => {
-    try {
-        const { rut } = req.params
-        const getUser = await User.findOne({ rut: rut })
-        res.status(200).json(getUser)
-    } catch (error) {
-        res.status(404).json({ message: ' No se encontro usuario. ' })
-    }
-}
