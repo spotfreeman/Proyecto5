@@ -15,7 +15,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 //Middlewares Cors Testear sin el corsOptions
-app.use(cors(corsOptions))
+app.use(cors())
 
 //Middlewares de rutas
 app.use('/api/v1', userRouter)
