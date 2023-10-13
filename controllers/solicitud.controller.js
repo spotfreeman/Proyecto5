@@ -1,4 +1,4 @@
-import { Solicitud } from '../Models/Solicitud.model'
+import { Solicitud } from '../Models/Solicitud.model.js'
 
 export const getAllSolicitud = async (req, res) => {
     try {
@@ -28,8 +28,19 @@ export const nuevaSolicitud = async (req, res) => {
         res.status(201).json({
             solicitud: saveSolicitud
         })
+    } catch (error) {
 
+    }
+}
 
+export const deleteSolicitud = async (req, res) => {
+    try {
+        const solicitudId = req.params.id
+        const removeSolicitud = await Solicitud.findByIdAndDelete({ id: solicitudId })
+        if (!removeSolicitud) {
+            return res.status(404).json({ message: 'No se pudo eliminar solicitud' })
+        }
+        res.status(202).json({ message: 'Solicitud Eliminada' })
     } catch (error) {
 
     }

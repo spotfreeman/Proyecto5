@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import userRouter from './Routes/user.routes.js'
 import productoRouter from './Routes/producto.routes.js'
+import solicitudRouter from './Routes/solicitud.routes.js'
 import { db } from './config/db.config.js'
 
 import dotenv from 'dotenv'
@@ -20,6 +21,7 @@ app.use(cors())
 //Middlewares de rutas
 app.use('/api/v1', userRouter)
 app.use('/api/v1', productoRouter)
+app.use('/api/v1', solicitudRouter)
 
 
 db()

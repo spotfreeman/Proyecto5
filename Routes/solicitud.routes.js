@@ -3,12 +3,14 @@ const router = express.Router()
 
 import {
     getAllSolicitud,
-    nuevaSolicitud
+    nuevaSolicitud,
+    deleteSolicitud
 
 } from '../controllers/solicitud.controller.js'
 
-router.get('/solicitud', getAllSolicitud)
-router.port('/solicitud', nuevaSolicitud)
+router.get('/solicitudes', getAllSolicitud)
+router.post('/solicitud', nuevaSolicitud)
+router.delete('/solicitud/:_id', deleteSolicitud)
 
 
 export default router

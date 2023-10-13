@@ -5,6 +5,6 @@ const solicitudSchema = new Schema({
     titulo: { type: String, require: true },
     descripcion: { type: String, require: true },
     nombre: { type: String, require: true }
-}, { versionKey: true })
+}, { versionKey: false })
 
-export const Solicitud = mongoose.model('solicitud', solicitudSchema)
+export const Solicitud = mongoose.model('solicituds', solicitudSchema)
