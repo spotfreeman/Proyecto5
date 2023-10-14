@@ -19,10 +19,25 @@ export const getProductoById = async (req, res) => {
     }
 }
 
+export const updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.removeProduct
+        const updateData = req.body
+        const updateProduct = await Producto.findOneAndUpdate({ id: productId }, updateData, { new: true })
+        if (!updateProduct) {
+            return res.status(404).json({ message: 'No se pudo actualizar Producto' })
+        }
+        res.status(200).json({ message: 'Producto Actualizado' })
+    } catch (error) {
+        res.status(500).json({ message: 'No fue posible actualizar producto' })
+    }
+}
+
+
 export const deleteProductById = async (req, res) => {
     try {
-        const { id } = req.params.id
-        const removeProduct = await Producto.findOneAndDelete({ id: id })
+        const { _id } = req.params.id
+        const removeProduct = await Producto.findOneAndDelete(_id)
 
         if (!removeProduct) {
             return res.status(404).json({ message: `El producto ${removeProduct.nombre} no fue eliminado.` })

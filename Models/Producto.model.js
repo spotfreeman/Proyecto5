@@ -7,7 +7,7 @@ const productoSchema = new Schema({
     valor: { type: String, required: true },
     descripcion: { type: String, required: true },
     material: { type: String, required: true },
-    img: { type: String }
+    img: { type: Number }
 
 }, { versionKey: false })
 
