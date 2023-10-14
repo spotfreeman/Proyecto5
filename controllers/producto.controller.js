@@ -19,3 +19,18 @@ export const getProductoById = async (req, res) => {
     }
 }
 
+export const deleteProductById = async (req, res) => {
+    try {
+        const { id } = req.params.id
+        const removeProduct = await Producto.findOneAndDelete({ id: id })
+
+        if (!removeProduct) {
+            return res.status(404).json({ message: `El producto ${removeProduct.nombre} no fue eliminado.` })
+
+        }
+        res.status(202).json({ message: 'Producto eliminado.' })
+
+    } catch (error) {
+
+    }
+}
